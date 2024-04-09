@@ -1,0 +1,14 @@
+Flask==3.0.1
+gunicorn==21.2.0
+
+requests==2.31.0
+structlog==24.1.0
+google-auth==2.3.2
+langchain
+tiktoken
+tavily-python
+langchain-openai
+langchain_openai
+langchain-community
+openai
+langchainhub
