@@ -4,6 +4,7 @@ google-auth==2.3.2
 tiktoken
 tavily-python
 openai 
+gunicorn
 fastapi
 pydantic 
 langchain
