@@ -7,17 +7,17 @@ langchain_openai
 langchain-community
 langchainhub
 python 
-openai = "^0.28.0"
+openai 
 fastapi
-pydantic = "1.10"
-langchain = "^0.0.324"
-uvicorn = "^0.23.2"
-tiktoken = "^0.4.0"
-tavily-python = "^0.1.9"
-langserve = "0.0.19"
-sse-starlette = "^1.6.5"
-google-api-python-client = "^2.102.0"
-html2text = "^2020.1.16"
+pydantic 
+langchain
+uvicorn
+tiktoken 
+tavily-python 
+langserve 
+sse-starlette 
+google-api-python-client 
+html2text
 anthropic = "^0.4.1"
 kay = "^0.1.2"
 google-cloud-aiplatform = "^1.35.0"
