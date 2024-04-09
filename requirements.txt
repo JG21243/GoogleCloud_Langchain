@@ -3,9 +3,6 @@ structlog==24.1.0
 google-auth==2.3.2
 tiktoken
 tavily-python
-langchain_openai
-langchain-community
-langchainhub
 openai 
 fastapi
 pydantic 
