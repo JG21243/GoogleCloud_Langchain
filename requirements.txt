@@ -6,7 +6,6 @@ tavily-python
 langchain_openai
 langchain-community
 langchainhub
-python 
 openai 
 fastapi
 pydantic 
