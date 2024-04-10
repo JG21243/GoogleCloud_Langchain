@@ -41,7 +41,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Backup
 from langchain.utilities import GoogleSearchAPIWrapper
-from langserve import add_routes
 from langsmith import Client
 from pydantic import BaseModel, Field
 from uuid import UUID
@@ -367,9 +366,10 @@ retriever = get_retriever()
 
 chain = create_chain(llm, retriever)
 
-add_routes(
-    app, chain, path="/chat", input_type=ChatRequest, config_keys=["configurable"]
-)
+# Replace the add_routes line with this
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    return await chain.arun(request.dict())
 
 
 class SendFeedbackBody(BaseModel):
