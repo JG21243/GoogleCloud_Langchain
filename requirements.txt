@@ -8,6 +8,7 @@ gunicorn
 fastapi
 pydantic 
 langchain
+langchain-community
 uvicorn
 tiktoken 
 tavily-python 
