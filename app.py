@@ -4,15 +4,15 @@ import os
 from datetime import datetime
 from operator import itemgetter
 from typing import List, Optional, Sequence, Tuple, Union
-
 import langsmith
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
+
 from langchain.callbacks.manager import CallbackManagerForRetrieverRun
-from langchain.chat_models import ChatAnthropic, ChatOpenAI, ChatVertexAI
-from langchain.document_loaders import AsyncHtmlLoader
-from langchain.document_transformers import Html2TextTransformer
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.chat_models import ChatAnthropic, ChatOpenAI, ChatVertexAI
+from langchain_community.document_loaders import AsyncHtmlLoader
+from langchain_community.document_transformers import Html2TextTransformer
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
 from langchain.retrievers import (
     ContextualCompressionRetriever,
@@ -40,7 +40,7 @@ from langchain.schema.runnable import (
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 # Backup
-from langchain.utilities import GoogleSearchAPIWrapper
+from langchain_community.utilities import GoogleSearchAPIWrapper
 from langsmith import Client
 from pydantic import BaseModel, Field
 from uuid import UUID
