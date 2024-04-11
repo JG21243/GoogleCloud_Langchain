@@ -369,7 +369,7 @@ chain = create_chain(llm, retriever)
 # Replace the add_routes line with this
 @app.post("/chat")
 async def chat(request: ChatRequest):
-    return await chain.arun(request.dict())
+    return await chain.ainvoke(request.dict())
 
 
 class SendFeedbackBody(BaseModel):
