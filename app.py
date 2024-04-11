@@ -14,7 +14,7 @@ from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
-from langchain.retrievers import (
+from langchain_community.retrievers import (
     ContextualCompressionRetriever,
     TavilySearchAPIRetriever,
 )
