@@ -1,1 +1,1 @@
-web: gunicorn --bind :8080 --workers 1 --threads 8 --timeout 0 app:app 
+web: uvicorn app:app --host=0.0.0.0 --port=${PORT:-8080}
