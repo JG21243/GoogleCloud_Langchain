@@ -366,8 +366,8 @@ retriever = get_retriever()
 
 chain = create_chain(llm, retriever)
 
-# Replace the add_routes line with this
-@app.post("/chat")
+# Replaced the add_routes line with this
+@app.post("/chat/stream_log")
 async def chat(request: ChatRequest):
     return await chain.ainvoke(request.dict())
 
