@@ -44,6 +44,8 @@ from langchain_community.utilities import GoogleSearchAPIWrapper
 from langsmith import Client
 from pydantic import BaseModel, Field
 from uuid import UUID
+import logging
+logger = logging.getLogger(__name__)
 
 RESPONSE_TEMPLATE = """\
 You are an expert researcher and writer, tasked with answering any question.
