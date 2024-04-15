@@ -369,7 +369,15 @@ chain = create_chain(llm, retriever)
 # Replaced the add_routes line with this
 @app.post("/chat/stream_log")
 async def chat(request: ChatRequest):
-    return await chain.ainvoke(request.dict())
+    logger.info(f"Received chat request: {request}")
+    try:
+        logger.info("Invoking the chain with the request data...")
+        result = await chain.ainvoke(request.dict())
+        logger.info(f"Chain invocation successful. Result: {result}")
+        return result
+    except Exception as e:
+        logger.exception(f"An error occurred while processing the chat request: {str(e)}")
+        return {"error": "An internal server error occurred. Please try again later.", "code": 500}
 
 
 class SendFeedbackBody(BaseModel):
@@ -383,14 +391,20 @@ class SendFeedbackBody(BaseModel):
 
 @app.post("/feedback")
 async def send_feedback(body: SendFeedbackBody):
-    client.create_feedback(
-        body.run_id,
-        body.key,
-        score=body.score,
-        comment=body.comment,
-        feedback_id=body.feedback_id,
-    )
-    return {"result": "posted feedback successfully", "code": 200}
+    try:
+        logger.info(f"Received feedback: {body}")
+        client.create_feedback(
+            body.run_id,
+            body.key,
+            score=body.score,
+            comment=body.comment,
+            feedback_id=body.feedback_id,
+        )
+        logger.info("Feedback posted successfully")
+        return {"result": "posted feedback successfully", "code": 200}
+    except Exception as e:
+        logger.exception(f"An error occurred while posting feedback: {str(e)}")
+        return {"error": "An internal server error occurred. Please try again later.", "code": 500}
 
 
 class UpdateFeedbackBody(BaseModel):
@@ -403,16 +417,23 @@ class UpdateFeedbackBody(BaseModel):
 async def update_feedback(body: UpdateFeedbackBody):
     feedback_id = body.feedback_id
     if feedback_id is None:
+        logger.warning("No feedback ID provided")
         return {
             "result": "No feedback ID provided",
             "code": 400,
         }
-    client.update_feedback(
-        feedback_id,
-        score=body.score,
-        comment=body.comment,
-    )
-    return {"result": "patched feedback successfully", "code": 200}
+    try:
+        logger.info(f"Updating feedback with ID: {feedback_id}")
+        client.update_feedback(
+            feedback_id,
+            score=body.score,
+            comment=body.comment,
+        )
+        logger.info("Feedback updated successfully")
+        return {"result": "patched feedback successfully", "code": 200}
+    except Exception as e:
+        logger.exception(f"An error occurred while updating feedback: {str(e)}")
+        return {"error": "An internal server error occurred. Please try again later.", "code": 500}
 
 
 # TODO: Update when async API is available
@@ -441,14 +462,20 @@ class GetTraceBody(BaseModel):
 async def get_trace(body: GetTraceBody):
     run_id = body.run_id
     if run_id is None:
+        logger.warning("No LangSmith run ID provided")
         return {
             "result": "No LangSmith run ID provided",
             "code": 400,
         }
-    return await aget_trace_url(str(run_id))
+    try:
+        logger.info(f"Getting trace URL for run ID: {run_id}")
+        trace_url = await aget_trace_url(str(run_id))
+        logger.info(f"Trace URL retrieved: {trace_url}")
+        return trace_url
+    except Exception as e:
+        logger.exception(f"An error occurred while getting the trace URL: {str(e)}")
+        return {"error": "An internal server error occurred. Please try again later.", "code": 500}
 
 import uvicorn
 if __name__ == "__main__":
-   
-
     uvicorn.run(app, host="0.0.0.0", port=8080)
