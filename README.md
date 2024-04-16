@@ -24,8 +24,11 @@ Example request body:
 
 The service requires the following environment variables to be set:
 **TAVILY_API_KEY**: API key for the Tavily search service
+
 **OPENAI_API_KEY**: API key for OpenAI's language models
+
 **LANGCHAIN_API_KEY**: API key for LangChain
+
 **KAY_API_KEY**: API key for the Kay AI service
 
 The Service URL is https://googlecloudlangchain-rackdzwlha-uc.a.run.app 
