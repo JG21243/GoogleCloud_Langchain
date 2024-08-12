@@ -320,7 +320,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
 has_google_creds = os.path.isfile(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
 
 llm = ChatOpenAI(
-    model="gpt-4-0125-preview",
+    model="gpt-4o",
     # model="gpt-4",
     streaming=True,
     temperature=0.1,
@@ -339,7 +339,7 @@ llm = ChatOpenAI(
 
 if has_google_creds:
     llm = ChatOpenAI(
-        model="gpt-4-0125-preview",
+        model="gpt-4o",
         # model="gpt-4",
         streaming=True,
         temperature=0.1,
