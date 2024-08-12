@@ -1,6 +1,6 @@
 requests
-structlog==24.1.0
-google-auth==2.3.2
+structlog
+google-auth
 tiktoken
 tavily-python
 openai 
