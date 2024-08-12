@@ -14,16 +14,14 @@ from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
-from langchain.retrievers import (
-    ContextualCompressionRetriever,
-    TavilySearchAPIRetriever,
-)
+from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import (
     DocumentCompressorPipeline,
     EmbeddingsFilter,
 )
-from langchain.retrievers.kay import KayAiRetriever
-from langchain.retrievers.you import YouRetriever
+from langchain_community.retrievers import TavilySearchAPIRetriever
+from langchain_community.retrievers import KayAiRetriever
+from langchain_community.retrievers import YouRetriever
 from langchain.schema import Document
 from langchain.schema.document import Document
 from langchain.schema.language_model import BaseLanguageModel
