@@ -13,7 +13,6 @@ langchain-core
 langchain-openai
 uvicorn
 tiktoken 
-tavily-python 
 langserve 
 sse-starlette 
 google-api-python-client 
@@ -23,3 +22,4 @@ kay
 google-cloud-aiplatform 
 black 
 isort 
+cohere
