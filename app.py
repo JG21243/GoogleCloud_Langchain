@@ -62,7 +62,8 @@ same number - if you want to cite `number1` multiple times for a sentence, only 
 `[{{number1}}]` not `[{{number1}}] [{{number1}}]`
 
 You should use bullet points in your answer for readability. Put citations where they apply \
-rather than putting them all at the end.
+rather than putting them all at the end, however the after the end of your answer, you should \
+include numbered URLS that correspond to each number citation in your answer.
 
 If there is nothing in the context relevant to the question at hand, just say "Hmm, \
 I'm not sure." Don't try to make up an answer.
