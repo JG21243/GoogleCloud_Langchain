@@ -16,10 +16,14 @@ from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
-from langchain.retrievers import ContextualCompressionRetriever, TavilySearchAPIRetriever
-from langchain.retrievers.document_compressors import DocumentCompressorPipeline, EmbeddingsFilter
-from langchain.retrievers.kay import KayAiRetriever
-from langchain.retrievers.you import YouRetriever
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.retrievers.document_compressors import (
+    DocumentCompressorPipeline,
+    EmbeddingsFilter,
+)
+from langchain_community.retrievers import TavilySearchAPIRetriever
+from langchain_community.retrievers import KayAiRetriever
+from langchain_community.retrievers import YouRetriever
 from langchain.schema import Document
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import AIMessage, HumanMessage
@@ -31,8 +35,40 @@ from langsmith import Client
 
 logger = logging.getLogger(__name__)
 
-RESPONSE_TEMPLATE = """
-You are an expert researcher and writer, tasked with answering any question. Generate a comprehensive and informative, yet concise answer of 1000 words or less for the given question based solely on the provided search results (URL and content). You must ...
+RESPONSE_TEMPLATE = """\
+You are an expert researcher and writer, tasked with answering any question.
+
+Generate a comprehensive and informative, yet concise answer of 1000 words or less for the \
+given question based solely on the provided search results (URL and content). You must \
+only use information from the provided search results. Use an unbiased and \
+objective tone. Combine search results together into a coherent answer. Do not \
+repeat text. Cite search results using [{{number}}] notation. Only cite the most \
+relevant results that answer the question accurately. Place these citations at the end \
+of the sentence or paragraph that reference them - do not put them all at the end. If \
+different results refer to different entities within the same name, write separate \
+answers for each entity. If you want to cite multiple results for the same sentence, \
+format it as `[{{number1}}] [{{number2}}]`. However, you should NEVER do this with the \
+same number - if you want to cite `number1` multiple times for a sentence, only do \
+`[{{number1}}]` not `[{{number1}}] [{{number1}}]`
+
+You should use bullet points in your answer for readability. Put citations where they apply \
+rather than putting them all at the end, however the after the end of your answer, you should \
+include numbered URLS that correspond to each number citation in your answer.
+
+If there is nothing in the context relevant to the question at hand, just say "Hmm, \
+I'm not sure." Don't try to make up an answer.
+
+Anything between the following `context` html blocks is retrieved from a knowledge \
+bank, not part of the conversation with the user.
+
+<context>
+    {context}
+<context/>
+
+REMEMBER: If there is no relevant information within the context, just say "Hmm, I'm \
+not sure." Don't try to make up an answer. Anything between the preceding 'context' \
+html blocks is retrieved from a knowledge bank, not part of the conversation with the \
+user. The current date is {current_date}.
 """
 
 REPHRASE_TEMPLATE = """
@@ -236,7 +272,8 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
 has_google_creds = os.path.isfile(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
 
 llm = ChatOpenAI(
-    model="gpt-4-0125-preview",
+    model="gpt-4o",
+    # model="gpt-4",
     streaming=True,
     temperature=0.1,
 ).configurable_alternatives(
@@ -252,7 +289,8 @@ llm = ChatOpenAI(
 
 if has_google_creds:
     llm = ChatOpenAI(
-        model="gpt-4-0125-preview",
+        model="gpt-4o",
+        # model="gpt-4",
         streaming=True,
         temperature=0.1,
     ).configurable_alternatives(
