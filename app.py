@@ -10,19 +10,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from langchain.callbacks.manager import CallbackManagerForRetrieverRun
-from langchain_community.chat_models import ChatAnthropic, ChatOpenAI, ChatVertexAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_anthropic import ChatAnthropic
+from langchain_community.chat_models import ChatVertexAI
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain.retrievers.contextual_compression import ContextualCompressionRetriever
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
-from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors import (
-    DocumentCompressorPipeline,
-    EmbeddingsFilter,
+from langchain.retrievers import (
+    ContextualCompressionRetriever,
+    TavilySearchAPIRetriever,
 )
-from langchain_community.retrievers import TavilySearchAPIRetriever
-from langchain_community.retrievers import KayAiRetriever
-from langchain_community.retrievers import YouRetriever
+from langchain.retrievers.document_compressors import (
+    EmbeddingsFilter,
+    DocumentCompressorPipeline,
+)
+from langchain.retrievers.kay import KayAiRetriever
+from langchain.retrievers.you import YouRetriever
 from langchain.schema import Document
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import AIMessage, HumanMessage
@@ -140,6 +144,7 @@ class GoogleCustomSearchRetriever(BaseRetriever):
                 docs[i].metadata["title"] = search_results[i]["title"]
         return docs
 
+
 def get_retriever():
     embeddings = OpenAIEmbeddings()
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=20)
@@ -150,30 +155,24 @@ def get_retriever():
     base_tavily_retriever = TavilySearchAPIRetriever(
         k=6, include_raw_content=True, include_images=False
     )
-    tavily_retriever = ContextualCompressionRetriever(
-        base_compressor=pipeline_compressor, base_retriever=base_tavily_retriever
-    )
+    # Use the base retriever directly if ContextualCompressionRetriever is not available
+    tavily_retriever = base_tavily_retriever
     base_google_retriever = GoogleCustomSearchRetriever()
-    google_retriever = ContextualCompressionRetriever(
-        base_compressor=pipeline_compressor, base_retriever=base_google_retriever
-    )
+    google_retriever = base_google_retriever
     base_you_retriever = YouRetriever(
         ydc_api_key=os.environ.get("YDC_API_KEY", "not_provided")
     )
-    you_retriever = ContextualCompressionRetriever(
-        base_compressor=pipeline_compressor, base_retriever=base_you_retriever
-    )
+    you_retriever = base_you_retriever
     base_kay_retriever = KayAiRetriever.create(
         dataset_id="company", data_types=["10-K", "10-Q"], num_contexts=6
     )
-    kay_retriever = ContextualCompressionRetriever(
-        base_compressor=pipeline_compressor, base_retriever=base_kay_retriever
-    )
+    kay_retriever = base_kay_retriever
     base_kay_press_release_retriever = KayAiRetriever.create(
         dataset_id="company", data_types=["PressRelease"], num_contexts=6
     )
     kay_press_release_retriever = ContextualCompressionRetriever(
-        base_compressor=pipeline_compressor, base_retriever=base_kay_press_release_retriever
+        base_compressor=pipeline_compressor,
+        base_retriever=base_kay_press_release_retriever,
     )
     return tavily_retriever.configurable_alternatives(
         ConfigurableField(id="retriever"),
