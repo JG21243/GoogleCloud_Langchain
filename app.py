@@ -5,7 +5,6 @@ from operator import itemgetter
 from typing import List, Optional, Sequence, Tuple, Union
 import logging
 from uuid import UUID
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
